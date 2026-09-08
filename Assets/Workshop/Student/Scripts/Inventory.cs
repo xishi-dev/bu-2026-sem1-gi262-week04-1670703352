@@ -1,39 +1,67 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Solution {
+namespace Solution
+{
     public class Inventory : MonoBehaviour
     {
         public Dictionary<string, int> inventory = new Dictionary<string, int>();
 
-        // เพิ่มไอเท็ม
+        // เพิ่มไอเท็ม  
         public void AddItem(string item, int amount)
         {
-            // 1. ตรวจสอบว่ามีไอเท็มนี้ในคลังแล้วหรือยัง
-           
+            // 1. ตรวจสอบว่ามีไอเท็มนี้ในคลังแล้วหรือยัง  
+            if (inventory.ContainsKey(item))
+            {
+                inventory[item] += amount;
+            }
+            else
+            {
+                inventory.Add(item, amount);
+            }
+
 
             Debug.Log("Added " + amount + " " + item + ". Total: " + inventory[item]);
         }
 
-        // ลบไอเท็ม
+        // ลบไอเท็ม  
         public void RemoveItem(string item, int amount)
         {
-            //4. ตรวจสอบว่ามีไอเท็มนี้ในคลังหรือไม่
-            
+            //4. ตรวจสอบว่ามีไอเท็มนี้ในคลังหรือไม่  
+            if (inventory.ContainsKey(item))
+            {
+                inventory[item] -= amount;
+
+                if (inventory[item] <= 0)
+                {
+                    inventory.Remove(item);
+                }
+            }
+
         }
         public bool HasItem(string item, int amount)
         {
-            //2. ตรวจสอบว่ามีไอเท็มนี้ในคลังหรือไม่ และมีจำนวนเพียงพอหรือไม่
+            //2. ตรวจสอบว่ามีไอเท็มนี้ในคลังหรือไม่ และมีจำนวนเพียงพอหรือไม่  
+            if (inventory.ContainsKey(item) && inventory[item] >= amount)
+            {
+                return true;
+            }
+
             return false;
         }
-        // ตรวจสอบจำนวนไอเท็ม
+        // ตรวจสอบจำนวนไอเท็ม  
         public int GetItemCount(string item)
         {
-            //3. ตรวจสอบว่ามีไอเท็มนี้ในคลังหรือไม่ ถ้ามีให้คืนค่าจำนวนไอเท็มนั้น
+            //3. ตรวจสอบว่ามีไอเท็มนี้ในคลังหรือไม่ ถ้ามีให้คืนค่าจำนวนไอเท็มนั้น  
+            if (inventory.ContainsKey(item))
+            {
+                return inventory[item];
+            }
+
             return 0;
         }
 
-        // แสดงรายการทั้งหมดในคลัง
+        // แสดงรายการทั้งหมดในคลัง  
         public void PrintInventory()
         {
             Debug.Log("--- Inventory Content ---");
@@ -50,4 +78,3 @@ namespace Solution {
         }
     }
 }
-
