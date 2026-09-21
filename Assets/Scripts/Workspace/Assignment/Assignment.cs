@@ -17,7 +17,7 @@ namespace Assignment
             // AS08_TopFrequentNumber();
             // AS09_PlayerInventory();
             // AS10_GameEventQueue();
-            // AS11_PlayerStatsTracker();
+            //AS11_PlayerStatsTracker();
         }
 
         #region Assignment
@@ -28,7 +28,28 @@ namespace Assignment
         public void AS01_CountWords()
         {
             string[] words = as01Words;
-            throw new System.NotImplementedException();
+            Dictionary<string, int> wordCount = new Dictionary<string, int>();
+
+            foreach (string word in words)
+            {
+                if (wordCount.ContainsKey(word))
+                {
+                    wordCount[word]++;
+
+                }
+                else
+                {
+                    wordCount[word] = 1;
+                }
+            }
+
+            foreach (var word in wordCount)
+            {
+                {
+                    Debug.Log($"Word: {word.Key}, Count: {word.Value}");
+                }
+            }
+
         }
 
         [Header("AS02 - Count Number")]
@@ -37,7 +58,24 @@ namespace Assignment
         public void AS02_CountNumber()
         {
             int[] numbers = as02Numbers;
-            throw new System.NotImplementedException();
+            Dictionary<int, int> numberCount = new Dictionary<int, int>();
+
+            foreach (int number in numbers)
+            {
+                if (numberCount.ContainsKey(number))
+                {
+                    numberCount[number]++;
+                }
+                else
+                {
+                    numberCount[number] = 1;
+                }
+            }
+
+            foreach (var number in numberCount)
+            {
+                Debug.Log($"Number: {number.Key}, Count: {number.Value}");
+            }
         }
 
         [Header("AS03 - Check Valid Brackets")]
@@ -46,7 +84,43 @@ namespace Assignment
         public void AS03_CheckValidBrackets()
         {
             string input = as03Input;
-            throw new System.NotImplementedException();
+            Dictionary<char, char> bracketPairs = new Dictionary<char, char>();
+            bracketPairs.Add('(', ')');
+            LinkedList<char> stack = new LinkedList<char>();
+
+            foreach (char c in input)
+            {
+                if (c == '(')
+                {
+                    stack.AddLast(c);
+                }
+                else if (c == ')')
+                {
+                    if (stack.Count == 0)
+                    {
+                        Debug.Log("Invalid");
+                        return;
+                    }
+                    else if (bracketPairs.ContainsKey(stack.Last.Value))
+                    {
+                        stack.RemoveLast();
+                    }
+                    else
+                    {
+                        Debug.Log("Invalid");
+                        return;
+                    }
+                }
+
+            }
+            if (stack.Count == 0)
+            {
+                Debug.Log("Valid");
+            }
+            else
+            {
+                Debug.Log("Invalid");
+            }
         }
 
         [Header("AS04 - Print Reverse Linked List")]
@@ -55,7 +129,18 @@ namespace Assignment
         public void AS04_PrintReverseLinkedList()
         {
             LinkedList<int> list = as04List.GetLinkedList();
-            throw new System.NotImplementedException();
+            var currentNode = list.Last;
+
+            if (currentNode == null)
+            {
+                Debug.Log("Linked list is empty.");
+                return;
+            }
+            while (currentNode != null)
+            {
+                Debug.Log(currentNode.Value);
+                currentNode = currentNode.Previous;
+            }
         }
 
         [Header("AS05 - Find Middle Element")]
@@ -64,7 +149,20 @@ namespace Assignment
         public void AS05_FindMiddleElement()
         {
             LinkedList<string> list = as05List.GetLinkedList();
-            throw new System.NotImplementedException();
+            if (list.Count == 0)
+            {
+                Debug.LogError("List is empty");
+                return;
+            }
+
+            var slow = list.First;
+            var fast = list.First;
+            while (fast != null && fast.Next != null)
+            {
+                slow = slow.Next;
+                fast = fast.Next.Next;
+            }
+            Debug.Log("Middle: " + slow.Value);
         }
 
         [Header("AS06 - Merge Dictionaries")]
@@ -75,7 +173,24 @@ namespace Assignment
         {
             Dictionary<string, int> dict1 = as06FirstDictionary.GetDictionary();
             Dictionary<string, int> dict2 = as06SecondDictionary.GetDictionary();
-            throw new System.NotImplementedException();
+
+            Dictionary<string, int> mergedDict = new Dictionary<string, int>(dict1);
+            foreach (var pair in dict2)
+            {
+                if (mergedDict.ContainsKey(pair.Key))
+                {
+                    mergedDict[pair.Key] += pair.Value;
+                }
+                else
+                {
+                    mergedDict[pair.Key] = pair.Value;
+                }
+            }
+
+            foreach (var pair in mergedDict)
+            {
+                Debug.Log("key: " + pair.Key + ", value: " + pair.Value);
+            }
         }
 
         [Header("AS07 - Remove Duplicates From Linked List")]
@@ -84,7 +199,37 @@ namespace Assignment
         public void AS07_RemoveDuplicatesFromLinkedList()
         {
             LinkedList<int> list = as07List.GetLinkedList();
-            throw new System.NotImplementedException();
+
+            if (list.Count <= 1)
+            {
+                foreach (int value in list)
+                {
+                    Debug.Log(value);
+                }
+                return;
+            }
+            Dictionary<int, bool> seen = new Dictionary<int, bool>();
+            LinkedListNode<int> current = list.First;
+
+            while (current != null)
+            {
+
+                LinkedListNode<int> next = current.Next;
+
+                if (seen.ContainsKey(current.Value))
+                {
+                    list.Remove(current);
+                }
+                else
+                {
+                    seen.Add(current.Value, true);
+                }
+                current = next;
+            }
+            foreach (int value in list)
+            {
+                Debug.Log(value);
+            }
         }
 
         [Header("AS08 - Top Frequent Number")]
@@ -93,7 +238,37 @@ namespace Assignment
         public void AS08_TopFrequentNumber()
         {
             int[] numbers = as08Numbers;
-            throw new System.NotImplementedException();
+            if (as08Numbers == null || as08Numbers.Length <= 0)
+            {
+                Debug.Log("Input array is empty");
+                return;
+            }
+            Dictionary<int, int> countMap = new Dictionary<int, int>();
+            foreach (int number in as08Numbers)
+            {
+                if (countMap.ContainsKey(number))
+                {
+                    countMap[number]++;
+                }
+                else
+                {
+                    countMap[number] = 1;
+                }
+            }
+
+            int topNumber = as08Numbers[0];
+            int maxCount = countMap[topNumber];
+
+            foreach (int number in as08Numbers)
+            {
+                int currentCount = countMap[number];
+                if (currentCount > maxCount)
+                {
+                    topNumber = number;
+                    maxCount = currentCount;
+                }
+            }
+            Debug.Log(topNumber + " count: " + maxCount);
         }
 
         [Header("AS09 - Player Inventory")]
@@ -106,7 +281,22 @@ namespace Assignment
             Dictionary<string, int> inventory = as09Inventory.GetDictionary();
             string itemName = as09ItemName;
             int quantity = as09Quantity;
-            throw new System.NotImplementedException();
+
+            if (inventory.ContainsKey(itemName))
+            {
+                inventory[itemName] += quantity;
+            }
+            else
+            {
+                inventory[itemName] = quantity;
+            }
+            foreach (var item in inventory)
+            {
+                var key = item.Key;
+                var count = item.Value;
+                Debug.Log($"{key} : {count}");
+            }
+
         }
 
         [Header("AS10 - Game Event Queue")]
@@ -115,7 +305,20 @@ namespace Assignment
         public void AS10_GameEventQueue()
         {
             LinkedList<GameEvent> eventQueue = as10EventQueue.GetLinkedList();
-            throw new System.NotImplementedException();
+            if (eventQueue.Count <= 0)
+            {
+                Debug.Log("Event queue is empty!");
+                return;
+            }
+
+            while (eventQueue.Count > 0)
+            {
+                var current = eventQueue.First.Value;
+                eventQueue.RemoveFirst();
+                Debug.Log("Processing event: " + current.Name);
+                Debug.Log("Remaining events: " + eventQueue.Count);
+                Debug.Log($"{current.EventType} event processed: {current.Name}");
+            }
         }
 
         [Header("AS11 - Player Stats Tracker")]
@@ -128,7 +331,22 @@ namespace Assignment
             Dictionary<string, int> playerStats = as11PlayerStats.GetDictionary();
             string statName = as11StatName;
             int value = as11Value;
-            throw new System.NotImplementedException();
+
+            if (playerStats.ContainsKey(statName))
+            {
+                playerStats[statName] += value;
+            }
+            else playerStats[statName] = value;
+            Debug.Log($"Updated {statName} : {playerStats[statName]}");
+
+            Debug.Log("Current player stats:");
+            foreach (var stat in playerStats)
+            {
+                var key = stat.Key;
+                var val = stat.Value;
+
+                Debug.Log($"{key} : {val}");
+            }
         }
 
         #endregion
